@@ -17,7 +17,9 @@ Jpkg is both a library and a set of Apache Ant tasks for building operating syst
 #### Usage
 Basic pattern for including the Ant task in your build:
 
-`<taskdef resource="antlib.xml" classpath="path/to/jpkg-combined.jar"/>`
+```xml
+<taskdef resource="antlib.xml" classpath="path/to/jpkg-combined.jar"/>
+```
 
 Most of the common fields are shown in this example. See `ANT_SCHEMA` the full Ant task schema for more details.
 ```xml
