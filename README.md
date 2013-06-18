@@ -11,6 +11,9 @@ Jpkg is both a library and a set of Apache Ant tasks for building operating syst
 * Also included is a Java library for working with Unix ar(1) archives.
 * Includes extensive unit tests.
 
+#### Documentation
+[Javadocs version 1.5](http://leplastrier.github.io/jpkg-library/javadoc/)
+
 #### Usage
 Basic pattern for including the Ant task in your build:
 
