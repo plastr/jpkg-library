@@ -1,0 +1,218 @@
+<HTML>
+<BODY BGCOLOR="white">
+<PRE>
+<FONT color="green">001</FONT>    /*<a name="line.1"></a>
+<FONT color="green">002</FONT>     * Jpkg - Java library and tools for operating system package creation.<a name="line.2"></a>
+<FONT color="green">003</FONT>     *<a name="line.3"></a>
+<FONT color="green">004</FONT>     * Copyright (c) 2007-2008 Three Rings Design, Inc.<a name="line.4"></a>
+<FONT color="green">005</FONT>     * All rights reserved.<a name="line.5"></a>
+<FONT color="green">006</FONT>     *<a name="line.6"></a>
+<FONT color="green">007</FONT>     * Redistribution and use in source and binary forms, with or without<a name="line.7"></a>
+<FONT color="green">008</FONT>     * modification, are permitted provided that the following conditions<a name="line.8"></a>
+<FONT color="green">009</FONT>     * are met:<a name="line.9"></a>
+<FONT color="green">010</FONT>     * 1. Redistributions of source code must retain the above copyright<a name="line.10"></a>
+<FONT color="green">011</FONT>     *    notice, this list of conditions and the following disclaimer.<a name="line.11"></a>
+<FONT color="green">012</FONT>     * 2. Redistributions in binary form must reproduce the above copyright<a name="line.12"></a>
+<FONT color="green">013</FONT>     *    notice, this list of conditions and the following disclaimer in the<a name="line.13"></a>
+<FONT color="green">014</FONT>     *    documentation and/or other materials provided with the distribution.<a name="line.14"></a>
+<FONT color="green">015</FONT>     * 3. Neither the name of the copyright owner nor the names of contributors<a name="line.15"></a>
+<FONT color="green">016</FONT>     *    may be used to endorse or promote products derived from this software<a name="line.16"></a>
+<FONT color="green">017</FONT>     *    without specific prior written permission.<a name="line.17"></a>
+<FONT color="green">018</FONT>     *<a name="line.18"></a>
+<FONT color="green">019</FONT>     * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"<a name="line.19"></a>
+<FONT color="green">020</FONT>     * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE<a name="line.20"></a>
+<FONT color="green">021</FONT>     * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE<a name="line.21"></a>
+<FONT color="green">022</FONT>     * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE<a name="line.22"></a>
+<FONT color="green">023</FONT>     * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR<a name="line.23"></a>
+<FONT color="green">024</FONT>     * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF<a name="line.24"></a>
+<FONT color="green">025</FONT>     * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS<a name="line.25"></a>
+<FONT color="green">026</FONT>     * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN<a name="line.26"></a>
+<FONT color="green">027</FONT>     * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)<a name="line.27"></a>
+<FONT color="green">028</FONT>     * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE<a name="line.28"></a>
+<FONT color="green">029</FONT>     * POSSIBILITY OF SUCH DAMAGE.<a name="line.29"></a>
+<FONT color="green">030</FONT>     */<a name="line.30"></a>
+<FONT color="green">031</FONT>    package com.threerings.jpkg.ant.dpkg.scripts.standard;<a name="line.31"></a>
+<FONT color="green">032</FONT>    <a name="line.32"></a>
+<FONT color="green">033</FONT>    import java.io.FileInputStream;<a name="line.33"></a>
+<FONT color="green">034</FONT>    import java.io.IOException;<a name="line.34"></a>
+<FONT color="green">035</FONT>    import java.io.InputStream;<a name="line.35"></a>
+<FONT color="green">036</FONT>    <a name="line.36"></a>
+<FONT color="green">037</FONT>    import com.threerings.antidote.property.BooleanProperty;<a name="line.37"></a>
+<FONT color="green">038</FONT>    import com.threerings.antidote.property.FileProperty;<a name="line.38"></a>
+<FONT color="green">039</FONT>    import com.threerings.antidote.property.StringProperty;<a name="line.39"></a>
+<FONT color="green">040</FONT>    import com.threerings.jpkg.ant.dpkg.DpkgData;<a name="line.40"></a>
+<FONT color="green">041</FONT>    import com.threerings.jpkg.ant.dpkg.scripts.TemplateScript;<a name="line.41"></a>
+<FONT color="green">042</FONT>    import com.threerings.jpkg.debian.MaintainerScript;<a name="line.42"></a>
+<FONT color="green">043</FONT>    <a name="line.43"></a>
+<FONT color="green">044</FONT>    import static com.threerings.antidote.MutabilityHelper.areMutablesSet;<a name="line.44"></a>
+<FONT color="green">045</FONT>    <a name="line.45"></a>
+<FONT color="green">046</FONT>    <a name="line.46"></a>
+<FONT color="green">047</FONT>    /**<a name="line.47"></a>
+<FONT color="green">048</FONT>     * An abstract {@link TemplateScript} for defining the script source from either a file or a<a name="line.48"></a>
+<FONT color="green">049</FONT>     * single command listed as a string.<a name="line.49"></a>
+<FONT color="green">050</FONT>     */<a name="line.50"></a>
+<FONT color="green">051</FONT>    public abstract class AbstractTypeScript extends TemplateScript<a name="line.51"></a>
+<FONT color="green">052</FONT>    {<a name="line.52"></a>
+<FONT color="green">053</FONT>        public AbstractTypeScript (MaintainerScript.Type type)<a name="line.53"></a>
+<FONT color="green">054</FONT>        {<a name="line.54"></a>
+<FONT color="green">055</FONT>            super(type);<a name="line.55"></a>
+<FONT color="green">056</FONT>        }<a name="line.56"></a>
+<FONT color="green">057</FONT>    <a name="line.57"></a>
+<FONT color="green">058</FONT>        // from VelocityTemplate<a name="line.58"></a>
+<FONT color="green">059</FONT>        public String getTemplateName ()<a name="line.59"></a>
+<FONT color="green">060</FONT>        {<a name="line.60"></a>
+<FONT color="green">061</FONT>            return "scripts/command_script.vm";<a name="line.61"></a>
+<FONT color="green">062</FONT>        }<a name="line.62"></a>
+<FONT color="green">063</FONT>    <a name="line.63"></a>
+<FONT color="green">064</FONT>        @Override // from TemplateScript<a name="line.64"></a>
+<FONT color="green">065</FONT>        public InputStream getSource (DpkgData data)<a name="line.65"></a>
+<FONT color="green">066</FONT>            throws IOException<a name="line.66"></a>
+<FONT color="green">067</FONT>        {<a name="line.67"></a>
+<FONT color="green">068</FONT>            // if the command property was set, return the velocity template.<a name="line.68"></a>
+<FONT color="green">069</FONT>            if (_command.isSet()) {<a name="line.69"></a>
+<FONT color="green">070</FONT>                addSubstitution("command", _command.getValue());<a name="line.70"></a>
+<FONT color="green">071</FONT>                return super.getSource(data);<a name="line.71"></a>
+<FONT color="green">072</FONT>    <a name="line.72"></a>
+<FONT color="green">073</FONT>            // otherwise return the file data.<a name="line.73"></a>
+<FONT color="green">074</FONT>            } else {<a name="line.74"></a>
+<FONT color="green">075</FONT>                return new FileInputStream(_source.getValue());<a name="line.75"></a>
+<FONT color="green">076</FONT>            }<a name="line.76"></a>
+<FONT color="green">077</FONT>        }<a name="line.77"></a>
+<FONT color="green">078</FONT>    <a name="line.78"></a>
+<FONT color="green">079</FONT>        // from PackageScript<a name="line.79"></a>
+<FONT color="green">080</FONT>        public boolean failOnError ()<a name="line.80"></a>
+<FONT color="green">081</FONT>        {<a name="line.81"></a>
+<FONT color="green">082</FONT>            return _failonerror.getValue();<a name="line.82"></a>
+<FONT color="green">083</FONT>        }<a name="line.83"></a>
+<FONT color="green">084</FONT>    <a name="line.84"></a>
+<FONT color="green">085</FONT>        /**<a name="line.85"></a>
+<FONT color="green">086</FONT>         * Ant setter field: the command line.<a name="line.86"></a>
+<FONT color="green">087</FONT>         */<a name="line.87"></a>
+<FONT color="green">088</FONT>        public void setCommand (String value)<a name="line.88"></a>
+<FONT color="green">089</FONT>        {<a name="line.89"></a>
+<FONT color="green">090</FONT>            _command.setValue(value);<a name="line.90"></a>
+<FONT color="green">091</FONT>        }<a name="line.91"></a>
+<FONT color="green">092</FONT>    <a name="line.92"></a>
+<FONT color="green">093</FONT>        /**<a name="line.93"></a>
+<FONT color="green">094</FONT>         * Ant setter field: the source file.<a name="line.94"></a>
+<FONT color="green">095</FONT>         */<a name="line.95"></a>
+<FONT color="green">096</FONT>        public void setSource (String value)<a name="line.96"></a>
+<FONT color="green">097</FONT>        {<a name="line.97"></a>
+<FONT color="green">098</FONT>            _source.setValue(value);<a name="line.98"></a>
+<FONT color="green">099</FONT>        }<a name="line.99"></a>
+<FONT color="green">100</FONT>    <a name="line.100"></a>
+<FONT color="green">101</FONT>        /**<a name="line.101"></a>
+<FONT color="green">102</FONT>         * Ant setter field: failonerror.<a name="line.102"></a>
+<FONT color="green">103</FONT>         */<a name="line.103"></a>
+<FONT color="green">104</FONT>        public void setFailonerror (String value)<a name="line.104"></a>
+<FONT color="green">105</FONT>        {<a name="line.105"></a>
+<FONT color="green">106</FONT>            _failonerror.setValue(value);<a name="line.106"></a>
+<FONT color="green">107</FONT>        }<a name="line.107"></a>
+<FONT color="green">108</FONT>    <a name="line.108"></a>
+<FONT color="green">109</FONT>        @Override // from BaseComponent<a name="line.109"></a>
+<FONT color="green">110</FONT>        protected void validateField ()<a name="line.110"></a>
+<FONT color="green">111</FONT>        {<a name="line.111"></a>
+<FONT color="green">112</FONT>            switch (areMutablesSet(_command, _source)) {<a name="line.112"></a>
+<FONT color="green">113</FONT>                case ALL_UNSET:<a name="line.113"></a>
+<FONT color="green">114</FONT>                    appendViolation(new UnsetScriptPropertiesViolation(this));<a name="line.114"></a>
+<FONT color="green">115</FONT>                    return;<a name="line.115"></a>
+<FONT color="green">116</FONT>    <a name="line.116"></a>
+<FONT color="green">117</FONT>                case ALL_SET:<a name="line.117"></a>
+<FONT color="green">118</FONT>                    reportConflictingProperties(_command, _source);<a name="line.118"></a>
+<FONT color="green">119</FONT>                    reportConflictingProperties(_source, _command);<a name="line.119"></a>
+<FONT color="green">120</FONT>                    return;<a name="line.120"></a>
+<FONT color="green">121</FONT>    <a name="line.121"></a>
+<FONT color="green">122</FONT>                case SOME_UNSET:<a name="line.122"></a>
+<FONT color="green">123</FONT>                    // only one property is set, which is correct.<a name="line.123"></a>
+<FONT color="green">124</FONT>                    break;<a name="line.124"></a>
+<FONT color="green">125</FONT>            }<a name="line.125"></a>
+<FONT color="green">126</FONT>    <a name="line.126"></a>
+<FONT color="green">127</FONT>            // validate required properties. failonerror defaults to true if not set.<a name="line.127"></a>
+<FONT color="green">128</FONT>            switch (validateProperties(_failonerror)) {<a name="line.128"></a>
+<FONT color="green">129</FONT>                case ALL_INVALID:<a name="line.129"></a>
+<FONT color="green">130</FONT>                case SOME_INVALID:<a name="line.130"></a>
+<FONT color="green">131</FONT>                    return;<a name="line.131"></a>
+<FONT color="green">132</FONT>    <a name="line.132"></a>
+<FONT color="green">133</FONT>                case ALL_VALID:<a name="line.133"></a>
+<FONT color="green">134</FONT>                    break;<a name="line.134"></a>
+<FONT color="green">135</FONT>            }<a name="line.135"></a>
+<FONT color="green">136</FONT>    <a name="line.136"></a>
+<FONT color="green">137</FONT>            // validate optional properties.<a name="line.137"></a>
+<FONT color="green">138</FONT>            switch (validateOptionalProperties(_command, _source)) {<a name="line.138"></a>
+<FONT color="green">139</FONT>                case ALL_INVALID:<a name="line.139"></a>
+<FONT color="green">140</FONT>                case SOME_INVALID:<a name="line.140"></a>
+<FONT color="green">141</FONT>                    return;<a name="line.141"></a>
+<FONT color="green">142</FONT>    <a name="line.142"></a>
+<FONT color="green">143</FONT>                case ALL_VALID:<a name="line.143"></a>
+<FONT color="green">144</FONT>                    break;<a name="line.144"></a>
+<FONT color="green">145</FONT>            }<a name="line.145"></a>
+<FONT color="green">146</FONT>        }<a name="line.146"></a>
+<FONT color="green">147</FONT>    <a name="line.147"></a>
+<FONT color="green">148</FONT>        /** Ant adder/setter fields. */<a name="line.148"></a>
+<FONT color="green">149</FONT>        private final StringProperty _command = new StringProperty("command", this);<a name="line.149"></a>
+<FONT color="green">150</FONT>        private final FileProperty _source = new FileProperty("source", this);<a name="line.150"></a>
+<FONT color="green">151</FONT>        private final BooleanProperty _failonerror = new BooleanProperty("failonerror", this, true);<a name="line.151"></a>
+<FONT color="green">152</FONT>    }<a name="line.152"></a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</PRE>
+</BODY>
+</HTML>
