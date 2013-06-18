@@ -5,10 +5,12 @@ Jpkg is both a library and a set of Apache Ant tasks for building operating syst
 
 
 Basic pattern for including the Ant task in your build:
+```
 <taskdef resource="antlib.xml" classpath="path/to/jpkg-combined.jar"/>
-
+```
 
 A simple contrived <dpkg> task example that shows most of the possible fields:
+```
 <dpkg output="dist/dpkg_out" prefix="/usr/local/" distribution="unstable">
   <package destroot="dist/destroot">
     <info>
@@ -47,24 +49,27 @@ A simple contrived <dpkg> task example that shows most of the possible fields:
     </scripts>
   </package>
 </dpkg>
-
+```
 
 If you create any custom TemplateScript classes you will need to do something like the following.
 
 Example custom-scripts.xml:
+```
 <?xml version="1.0"?>
 <antlib>
     <typedef name="customscript" classname="com.example.CustomScript"/>
 </antlib>
+```
 
 Pattern for including the Ant task in your build with custom TemplateScript classes:
+```
 <path id="jpkg.classpath">
   <pathelement location="${buildlibs.dir}/jpkg-combined.jar"/>
   <pathelement location="${buildlibs.dir}/custom-scripts.jar"/>
 </path>
 <taskdef resource="antlib.xml" classpathref="jpkg.classpath" loaderref="jpkg.loader"/>
 <typedef resource="custom-scripts.xml" classpathref="jpkg.classpath" loaderref="jpkg.loader"/>
-
+```
 
 Distribution files:
 jpkg-combined.jar - The Jpkg library and ant tasks as well as all dependencies.
