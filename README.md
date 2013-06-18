@@ -20,7 +20,7 @@ Basic pattern for including the Ant task in your build:
 `<taskdef resource="antlib.xml" classpath="path/to/jpkg-combined.jar"/>`
 
 Most of the common fields are shown in this example. See `ANT_SCHEMA` the full Ant task schema for more details.
-```
+```xml
 <dpkg output="dist/dpkg_out" prefix="/usr/local/" distribution="unstable">
   <package destroot="dist/destroot">
     <info>
@@ -94,7 +94,7 @@ See src/java/com/threerings/jpkg/ant/dpkg/scripts/standard/HelloWorld.java for a
 If you create any custom !TemplateScript classes you will need to do something like the following.
 
 ##### Example custom-scripts.xml:
-```
+```xml
 <?xml version="1.0"?>
 <antlib>
     <typedef name="customscript" classname="com.example.CustomScript"/>
@@ -102,7 +102,7 @@ If you create any custom !TemplateScript classes you will need to do something l
 ```
 
 ##### Pattern for including the Ant task in your build with custom TemplateScript classes:
-```
+```xml
 <path id="jpkg.classpath">
   <pathelement location="${buildlibs.dir}/jpkg-combined.jar"/>
   <pathelement location="${buildlibs.dir}/custom-scripts.jar"/>
