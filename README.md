@@ -11,6 +11,10 @@ Jpkg is both a library and a set of Apache Ant tasks for building operating syst
 * Also included is a Java library for working with Unix ar(1) archives.
 * Includes extensive unit tests.
 
+#### Downloads
+[jpkg-bin-1.5.zip (1.5 MB)](http://leplastrier.github.io/jpkg-library/downloads/jpkg-bin-1.5.zip) : The Jpkg library and ant tasks as well as all dependencies.
+[jpkg-src-1.5.zip (3.8 MB)](http://leplastrier.github.io/jpkg-library/downloads/jpkg-src-1.5.zip) : The source bundle, includes javadocs.
+
 #### Documentation
 [Javadocs version 1.5](http://leplastrier.github.io/jpkg-library/javadoc/)
 
