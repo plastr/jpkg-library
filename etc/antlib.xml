@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<antlib>
+    <!-- the dpkg task -->
+    <taskdef name="dpkg" classname="com.threerings.jpkg.ant.dpkg.Dpkg"/>
+
+    <!-- the maintainer script classes -->
+    <typedef name="helloworld" classname="com.threerings.jpkg.ant.dpkg.scripts.standard.HelloWorld"/>
+    <typedef name="preinst" classname="com.threerings.jpkg.ant.dpkg.scripts.standard.PreInst"/>
+    <typedef name="postinst" classname="com.threerings.jpkg.ant.dpkg.scripts.standard.PostInst"/>
+    <typedef name="prerm" classname="com.threerings.jpkg.ant.dpkg.scripts.standard.PreRm"/>
+    <typedef name="postrm" classname="com.threerings.jpkg.ant.dpkg.scripts.standard.PostRm"/>
+</antlib>

@@ -1,0 +1,13 @@
+* Add a command line interface that uses xml files for input. Consider using jaxb for generating the Java objects from the xml. Allow the Ant task to be supplied this xml file as well.
+* Add a maintainer script called "adduser" which knows how to add a local user on a number of platforms.
+* Remove validateOptionalProperties. Breaks when passed a property with a default value [does not trigger validation] and confusing in general.
+* Should the prefix be enforced to be an absolute path?
+* Use the Ant xml namespace for the dpkg task?
+* Look at Ant's Property class. It is a Task and performs operations in execute(). Could autovalidation be done in a similar fashion in Antidote?
+* Add a PropertyGroup class which will be used to validate groups of properties. arePropertiesSet would returns a SetStatus for all properties defined. A utility method could then be added to BaseField which would determine if all the properties were set in a group, and whether any conflicting property groups had any properties set. Revisit validateField() in Permission as an example for a PropertyGroup.
+* Is it important that the PathPermissions come back out of the PermissionsMap in the order they went in? If so use a SortedSet to handle this.
+* Consider enumerating all known package sections into an enum from here http://www.debian.org/doc/debian-policy/ch-archive.html#s-subsections and providing a similar setup that DebianArchitectures has [also should that class name be singular?].
+* Support setting a default package version in the Ant task e.g version="default" or version="timebased" etc.
+* Rename areMutablesSet
+* Rename Property* to Attribute* ?
+* Fix javadocs: "Checks to see if the supplied Object is not set, e.g." it thinks the e.g. is the end of the sentence.
