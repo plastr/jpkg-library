@@ -1,0 +1,127 @@
+Ant schema for the <dpkg> task:
+
+Overview:
+<dpkg>
+  <package>
+    <info/>
+  </package>
+  <package/>
+  ...
+</dpkg>
+
+The <dpkg> task consists of a top level <dpkg> attribute, which describes the set of packages being built. A <dpkg> task can then contain one or more <package> fields, which will build the described package using the same metadata described in the <dpkg> element.
+
+<dpkg> : Describes all packages being built by this task instance.
+Required Properties:
+    output = The directory all packages should be built into.
+    prefix = The prefix the package will be installed into when deployed. This value is passed to maintainer scripts and used for relative <permissions><path> fields.
+    distribution = The APT distribution this package is destined for. This is passed to maintainer scripts.
+
+Required Fields
+    <package> : Describes a given package being built.
+    Required Properties:
+        destroot = The source directory for the package contents. The root of this directory will be the root of the package when deployed.
+  
+    Optional Properties:
+        filename = Optionally override the default output file name.
+
+    Required Fields:
+    <info> : Describes the package metadata used by the dpkg tools.
+        Required Fields:
+        <name> : The package name.
+        <version> : The package version.
+            Optional Properties:
+            epoch = The package version epoch.
+            debianVersion = The package Debian version.
+        <arch> : The package architecture.
+        <description> : The package description. Simple form: <description>Description</description>
+        
+        Optional Fields:
+            <summary> : If the simple form of the description field is not used, the summary must be set here.
+            <blank> : Insert a blank line into the description.
+            <paragraph> : Add a paragraph of text to the description.
+            <verbatim> : Add a verbatim line to the description.
+            <maintainer> : The package maintainer. Only has required fields, no properties.        
+            Required Fields:
+                <name> : The name of the maintainer.
+                <email> : The maintainer's email address.
+
+    Optional Fields:
+        <priority> : The package priority. Defaults to "optional".
+        <section> : The package section. Defaults to "misc".
+
+Optional Fields:
+    <permissions> : Describes filesystem permissions to apply to paths in the package.
+    Required Fields:
+        <permission> : An individual permission. One or more required in the section.
+        Required Properties:
+            mode = The octal file mode for this path. e.g. 755.
+        
+        Optional Properties:
+            recursive = A boolean as to whether this permission should be applied recursively or not. Defaults to false.
+
+            Note: Only user/group or userId/groupId can be set, not both.
+            user = The username of the owner.
+            group = The group name of the owner.
+            userId = The user id of the owner.
+            groupId = The group id of the owner.
+        
+        Required Fields:
+            <path> : One or more path field is required, which is the name of the path to apply the permission to. If the path supplied is relative, then the prefix defined in the <package> section is appended to the path when applied.
+    
+    <dependencies> : Describes the dependencies this package has on other packages.
+    Required Fields:
+        One or more of the following fields is required. All of these dependency type fields are of the form:
+        <dependency_type package="package_name"/>
+        or
+        <dependency_type package="package_name">
+            <condition_type>package_version</condition_type>
+        </dependency_type>
+    
+        The following dependency types are defined:
+        <require> : The package described in this <package> section depends on this package being installed.
+        <conflict> : The package described in this <package> section conflicts with this package.
+        <replacement> :The package described in this <package> section replaces this package.
+    
+        Required Property:
+            package = The name of the package described by this dependency.
+        
+        Optional Field:
+            "condition_type" = The optional condition to further describe this dependency. The condition also requires a version. e.g in the form <condition_type>package_version</condition_type>
+        
+            The following condition types are defined:
+            greaterThan = The version of the dependency package must be greater than this version.
+            equalOrGreaterThan = The version of the dependency package must be greater than or equal to this version.
+            equalTo = The version of the dependency package must be equal to this version.
+            equalOrLesserThan = The version of the dependency package must be less than or equal to this version.
+            lesserThan = The version of the dependency package must be less than this version.
+  
+        There is one last type of dependency, a list of <alternatives>.
+            <alternatives>
+                <require package="package1"/>
+                <require package="package2">
+                    <equalTo>1.0</equalTo>
+                </require>
+            </alternatives>
+        
+            This states that the package described in this <package> section must have one of the listed packages installed. Only <require> is allowed in this section.
+
+    <scripts> : Describes the list of maintainer scripts to be run by this package.
+    Required Fields:
+        One or more maintainer script field is required. The builtin maintainer script types have the following form:
+        <script_type command="command" failonerror="false"/>
+        or
+        <script_type source="/path/to/script_source"/>
+        
+        "script_type" = The type of maintainer script being described.. See below.
+        command = The single command to execute when the script is run.
+        source = The path a file which contains the source for the script to be run.
+        failonerror = An optional boolean as to whether this scripts failure should be reported and cause the packaging process to fail. Defaults to true.
+        
+        Any number or combination of these types can be listed in this section. The scripts of the same type will be executed in the order they are listed.
+        
+        The following script_types are defined.
+        preinst, postinst, prerm, postrm.
+
+        You may also use custom TemplateScript classes you have defined in this section. See the HelloWorld script for a simple example and see the README for more details in deploying these scripts.
+
