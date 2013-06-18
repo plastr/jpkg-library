@@ -1,0 +1,231 @@
+Issues dumped from original Google Code project.
+
+Issue 1:
+Title: Issue in recursive permission applying.
+State: closed
+Created: 2008-04-01T21:04:25.000Z
+
+Description:
+If the destroot had an entry here:
+directory/file.txt
+
+Then this permission would not apply:
+
+<permission user="user" group="group" mode="664" recursive="false">
+  <path>directory/file.txt</path>
+</permission> 
+
+And this permission would cause a java.lang.StringIndexOutOfBoundsException
+
+<permission user="user" group="group" mode="664" recursive="true">
+  <path>directory/file.txt</path>
+</permission>
+
+Comment 1 (by project creator):
+The crux of the issue was the use of org.apache.commons.io.FilenameUtils.getFullPathNoEndSeparator which did 
+not work as expected as it strips the file from the path as well. Moreover, the code for applying permissions to 
+tar file entries was opaque, and has hopefully been made more clear.
+
+This is fixed in r642, http://code.google.com/p/jpkg-library/source/detail?r=642
+
+Comment 2 (by project creator):
+Issue resolved.
+
+------------------------------------
+
+
+Issue 2:
+Title: The recursive property on the <permission> field should be optional and default to false.
+State: closed
+Created: 2008-04-02T23:44:20.000Z
+
+Description:
+The recursive property only makes sense for directories, and permissions that point to individual 
+files do not need to worry about the recursive property, so default it to false.
+
+Comment 1 (by project creator):
+This is fixed in r646, http://code.google.com/p/jpkg-library/source/detail?r=646
+
+------------------------------------
+
+
+Issue 3:
+Title: Maintainer scripts should optionally be allowed to fail
+State: closed
+Created: 2008-04-15T18:48:03.000Z
+
+Description:
+A maintainer script returning non zero may put the package into a state where it is not fully 
+uninstalled and cannot be removed without a lot of effort. Maintainer scripts should be allowed to 
+optionally stipulate that failure should not be reported.
+
+Comment 1 (by project creator):
+This is fixed in r657, http://code.google.com/p/jpkg-library/source/detail?r= 657
+
+------------------------------------
+
+
+Issue 4:
+Title: Can't specify Pre-Depends.
+State: open
+Created: 2009-06-10T18:02:58.000Z
+
+Description:
+No way to specify Pre-Depends dependencies?
+
+Comment 1 (by project creator):
+Supporting Pre-Depends was not a requirement for the original design. It looks as if it could be added rather 
+easily based on the existing PackageDependency classes. I would be more than willing to apply a patch to 
+support this if you can provide one.
+
+------------------------------------
+
+
+Issue 5:
+Title: Hyphen in upstream_version
+State: open
+Created: 2009-07-15T20:55:48.000Z
+
+Description:
+According to debian policy ( http://www.debian.org/doc/debian-policy/ch-
+controlfields.html#s-f-Version ) hyphens are allowed in upstream_version if 
+there is a debian_version.
+
+Jpkg doesn't allow any hyphens in upstream_version.
+
+Comment 1 (by project creator):
+It is true that the Debain policy allows for this. It was decided during development that supporting the various 
+version field combination requirements was not a priority and that jpkg-library would enforce the rules as if all 
+fields had been supplied, since all version fields are supported.  I would be more than willing to apply a patch to 
+support the various version field permutations if you can provide one.
+
+------------------------------------
+
+
+Issue 6:
+Title: <version>${version}</version>
+State: closed
+Created: 2009-08-19T00:22:03.000Z
+
+Description:
+The <version> field is badly formed: Invalid control file data. 
+Reason=[Upstream version must match the pattern. version=[-1] 
+pattern=[[\p{Digit}][\p{Alnum}.+~]*]]. See: 
+http://www.debian.org/doc/debian-policy/ch-controlfields.html
+
+I'd love to be able to pass in ant variables to the various tags.
+
+<version>${version}</version>
+<name>${name}</name>
+
+thanks
+
+Comment 1 (by project creator):
+What is the value of ${version}? Judging from the error message the value is "-1". If so, the Debian policy states 
+that the version should start with a digit and jpkg-library is enforcing that policy. See the description of 
+upstream_version here:
+http://www.debian.org/doc/debian-policy/ch-controlfields.html#s-f-Version
+
+Comment 2 (by issue submitter):
+Thanks for the fast response jon. I'm an idiot. Not your issue. =) Please close as invalid.
+
+Comment 3 (by project creator):
+No worries. Glad I could help.
+
+------------------------------------
+
+
+Issue 7:
+Title: uudecode is a dependency
+State: closed
+Created: 2009-08-19T21:51:34.000Z
+
+Description:
+ok, just realized that jpkg wraps the scripts in some wrapper which 
+uuencodes them (btw, this isn't documented and it probably should be cause 
+it was a bit of a surprise and i don't really understand why it is done).
+
+anyway, uudecode (sharutils) is thus a dependency and should probably be 
+added to the control file automatically.
+
+Comment 1 (by project creator):
+I've added a note in the dependency listings on the project home page. Thank you for pointing this out.
+
+------------------------------------
+
+
+Issue 8:
+Title: basic globs in <path>
+State: open
+Created: 2011-01-11T23:56:43.000Z
+
+Description:
+omg, it'd be so nice if I could do:
+
+<path>foo/*.sh</path>
+
+=)
+
+------------------------------------
+
+
+Issue 9:
+Title: postinst script erroneously called with "postinst" as first argument, contrary to Debian packaging spec
+State: open
+Created: 2013-01-08T18:54:04.000Z
+
+Description:
+<b>What steps will reproduce the problem?</b>
+1. Create a new build.xml with a <dpkg> with this nested:
+
+                <scripts>
+                    <postinst source="debian/foo.postinst"/>
+                </scripts>
+
+2. Where foo.postinst aborts if it gets an $1 arg that is not configure, abort-upgrade, abort-remove, or abort-deconfigure.
+
+<b>What is the expected output? What do you see instead?</b>
+
+Expected success. Instead got this error:
+
+$ sudo dpkg -i foo.deb
+(Reading database ... 56468 files and directories currently installed.)
+Preparing to replace foo 1.0.20121217.152650 (using foo.deb) ...
+Unpacking replacement foo ...
+Setting up foo (1.0.20121217.153702) ...
+postinst called with unknown argument `postinst'
+The script "Simple postinst script" failed.
+dpkg: error processing foo (--install):
+subprocess installed post-installation script returned error exit status 1
+Processing triggers for ureadahead ...
+Errors were encountered while processing:
+foo
+
+<b>What version of the product are you using? On what operating system?</b>
+
+Version is 1.5, running on Linux (Ubuntu)
+
+<b>Please provide any additional information below.</b>
+
+Comment 1 (by project creator):
+This is an unfortunate issue. However, since I have not worked on this code for 5 years, I am reluctant to make a change which might break behavior for other users. The offending line appears to be line 35 of this file:
+http://code.google.com/p/jpkg-library/source/browse/trunk/etc/script_runner.vm#35
+
+It might be possible to to remove '${script_type}' from line 35 to resolve your issue, however, the Debian specification may require a valid argument, and passing an empty argument would still be considered invalid.
+
+Change:
+$TMPFILE ${script_type}
+To:
+$TMPFILE
+
+If you would like to add support to the script_runner to pass valid script arguments based on the type of script and/or stage in the installation process I would happily apply a patch.
+
+Comment 2 (by issue submitter):
+Presumably, the right argument to give is "$@"
+
+Comment 3 (by issue submitter):
+Ideally, if only one script is present in the <jpkg> task, then there's no point merging them using uuencode. I was surprised to find that it did this at all.
+
+Is there another simple java deb-builder which is better? This does seem to be the best.
+
+------------------------------------
