@@ -78,7 +78,7 @@ public class EncodedScript
 
         output.close();
         bytes.close();
-        _encoded = bytes.toString(Dpkg.CHAR_ENCODING);
+        _encoded = bytes.toString(Dpkg.CHAR_ENCODING).replace("\r\n", "\n");
     }
 
     /**
