@@ -156,7 +156,8 @@ public class PackageTarFileTest extends TestTarFile
             assertEquals(UnixStandardPermissions.ROOT_USER.getId(), entry.getUserId());
             assertEquals(UnixStandardPermissions.ROOT_GROUP.getName(), entry.getGroupName());
             assertEquals(UnixStandardPermissions.ROOT_GROUP.getId(), entry.getGroupId());
-            assertEquals(UnixStandardPermissions.STANDARD_FILE_MODE, entry.getMode());
+            assertEquals(Integer.toOctalString(UnixStandardPermissions.STANDARD_FILE_MODE),
+                         Integer.toOctalString(entry.getMode()));
             assertEquals(TEST_FILE.lastModified(), entry.getModTime().getTime());
 
             // verify the file data looks correct.
@@ -310,16 +311,17 @@ public class PackageTarFileTest extends TestTarFile
 
             // verify non recursive permissions worked
             TarEntry entry = input.getNextEntry();
-            assertEquals("non_recursive_dir/dir/", entry.getName());
+            assertEquals("non_recursive_dir/dir", entry.getName());
             assertEquals(UnixStandardPermissions.ROOT_USER.getName(), entry.getUserName());
             assertEquals(UnixStandardPermissions.ROOT_USER.getId(), entry.getUserId());
             assertEquals(UnixStandardPermissions.ROOT_GROUP.getName(), entry.getGroupName());
             assertEquals(UnixStandardPermissions.ROOT_GROUP.getId(), entry.getGroupId());
-            assertEquals(UnixStandardPermissions.STANDARD_DIR_MODE, entry.getMode());
+            assertEquals(Integer.toOctalString(UnixStandardPermissions.STANDARD_DIR_MODE),
+                         Integer.toOctalString(entry.getMode()));
 
             // verify recursive permissions worked.
             entry = input.getNextEntry();
-            assertEquals("recursive_dir/dir/", entry.getName());
+            assertEquals("recursive_dir/dir", entry.getName());
             assertEquals(TEST_USER, entry.getUserName());
             assertEquals(TEST_GROUP, entry.getGroupName());
             assertEquals(TEST_MODE, entry.getMode());
