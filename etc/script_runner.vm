@@ -10,32 +10,38 @@ fi
 
 #foreach ($script in $scripts)
 #### Start of script named "$script.getFriendlyName()"
-TMPFILE=`mktemp -q /tmp/${script_type}.XXXXXX`
+UUTMPFILE=`mktemp -q /tmp/${script_type}.XXXXXX`
+if [ $? -ne 0 ]; then
+    echo "$0: Can't create temp file, exiting..."
+    exit 1
+fi
+SHTMPFILE=`mktemp -q /tmp/${script_type}.XXXXXX`
 if [ $? -ne 0 ]; then
     echo "$0: Can't create temp file, exiting..."
     exit 1
 fi
 
-cat >$TMPFILE << EOF
+cat >$UUTMPFILE << EOF
 $script.getEncodedSource()
 EOF
 
 # decode the base64 encoded script
-$UUDECODE -o $TMPFILE $TMPFILE
+$UUDECODE -o $SHTMPFILE $UUTMPFILE
 EXITCODE=$?
 if [ $EXITCODE != 0 ]; then
     echo "uudecoding the \"$script.getFriendlyName()\" script failed."
-    rm $TMPFILE
+    rm -f $UUTMPFILE $SHTMPFILE
     exit $EXITCODE
 fi
 
-chmod +x $TMPFILE
+chmod +x $SHTMPFILE
 
 # $* is intentionally not being passed to the encoded scripts to encourage simplicity and consistency with other potential packaging systems. Pass only the type of script being run.
-$TMPFILE ${script_type}
+$SHTMPFILE ${script_type}
 RESULT=$?
 
-rm $TMPFILE
+rm $UUTMPFILE $SHTMPFILE
+
 #if ($script.failOnError())
 if [ $RESULT != 0 ]; then
     echo "The script \"$script.getFriendlyName()\" failed."
