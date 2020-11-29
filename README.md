@@ -12,12 +12,12 @@ Jpkg is both a library and a set of Apache Ant tasks for building operating syst
 * Includes extensive unit tests.
 
 #### Downloads
-[jpkg-bin-1.5.zip (1.5 MB)](http://plastr.github.io/jpkg-library/downloads/jpkg-bin-1.5.zip) : The Jpkg library and ant tasks as well as all dependencies.
+[jpkg-bin-1.5.zip (1.5 MB)](https://plastr.github.io/jpkg-library/downloads/jpkg-bin-1.5.zip) : The Jpkg library and ant tasks as well as all dependencies.
 
-[jpkg-src-1.5.zip (3.8 MB)](http://plastr.github.io/jpkg-library/downloads/jpkg-src-1.5.zip) : The source bundle, includes javadocs.
+[jpkg-src-1.5.zip (3.8 MB)](https://plastr.github.io/jpkg-library/downloads/jpkg-src-1.5.zip) : The source bundle, includes javadocs.
 
 #### Documentation
-[Javadocs version 1.5](http://plastr.github.io/jpkg-library/javadoc/)
+[Javadocs version 1.5](https://plastr.github.io/jpkg-library/javadoc/)
 
 #### Usage
 Basic pattern for including the Ant task in your build:
@@ -136,4 +136,4 @@ The `<dpkg>` Ant task is the only currently implemented interface for using the 
 Jpkg also contains a library called Antidote, which is an attempt to make certain aspects of writing Ant tasks easier, especially dealing with the mutable state of Ant objects and validation of Ant supplied data. It is designed to be useful standalone, and could easily be incorporated into other projects.
 
 #### Author:
-Jpkg was written by Jonathan Le Plastrier, based on an original Python implementation by Landon Fuller. It is copyright [Three Rings Design](http://threerings.net) and is released under a BSD license. See the LICENSE file.
+Jpkg was written by Jonathan Le Plastrier, based on an original Python implementation by Landon Fuller. It is copyright Three Rings Design and is released under a BSD license. See the LICENSE file.
